@@ -2,50 +2,83 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 
-resultados = []
+def girar_ruleta():
+    return random.randint(0, 36)
 
-for i in range(10):
-    contador = 0
-    for j in range(5):
-        valor = random.randint(0,36)
-        resultados.append(valor)
-        if valor == 17:
-            contador += 1
+def simulacion(tiradas, numero_elegido):
+    resultados = []
+    for _ in range(tiradas):
+        resultados.append(girar_ruleta())
 
-total_resultados = len(resultados)
-frecuencia_relativa = [resultados.count(i) / total_resultados for i in range(37)]
+    frecuencia_numero_elegido = resultados.count(numero_elegido)
+    probabilidad = frecuencia_numero_elegido / tiradas
+    frecuencia_relativa = frecuencia_numero_elegido / len(resultados)
+    valor_promedio = np.mean(resultados)
+    desvio = np.std(resultados)
+    varianza = np.var(resultados)
 
-valor_promedio = np.mean(resultados)
+    return resultados, probabilidad, frecuencia_relativa, valor_promedio, desvio, varianza
 
-desvio_estandar = np.std(resultados)
+def main():
+    tiradas = int(input("Ingrese la cantidad de tiradas: "))
+    corridas = int(input("Ingrese la cantidad de corridas: "))
+    numero_elegido = int(input("Ingrese el número elegido (0-36): "))
 
-varianza = np.var(resultados)
+    probabilidades = []
+    frecuencias_relativas = []
+    valores_promedio = []
+    desvios = []
+    varianzas = []
+    for _ in range(corridas):
+        resultados, probabilidad, frecuencia_relativa, valor_promedio, desvio, varianza = simulacion(tiradas,
+                                                                                                     numero_elegido)
+        probabilidades.append(probabilidad)
+        frecuencias_relativas.append(frecuencia_relativa)
+        valores_promedio.append(valor_promedio)
+        desvios.append(desvio)
+        varianzas.append(varianza)
+    plt.figure(figsize=(10, 6))
+
+    plt.subplot(2, 2, 1)
+    plt.hist(frecuencias_relativas, bins=10, color='blue', edgecolor='black', alpha=0.7)
+    plt.title('Frecuencia Relativa')
+    plt.xlabel('Valor')
+    plt.ylabel('Frecuencia')
+
+    plt.subplot(2, 2, 2)
+    plt.hist(valores_promedio, bins=10, color='green', edgecolor='black', alpha=0.7)
+    plt.title('Valor Promedio')
+    plt.xlabel('Valor')
+    plt.ylabel('Frecuencia')
+
+    plt.subplot(2, 2, 3)
+    plt.hist(desvios, bins=10, color='red', edgecolor='black', alpha=0.7)
+    plt.title('Desvío')
+    plt.xlabel('Valor')
+    plt.ylabel('Frecuencia')
+
+    plt.subplot(2, 2, 4)
+    plt.hist(varianzas, bins=10, color='orange', edgecolor='black', alpha=0.7)
+    plt.title('Varianza')
+    plt.xlabel('Valor')
+    plt.ylabel('Frecuencia')
+
+    plt.tight_layout()
+    plt.savefig('Gráficas-Ruleta-2.png')
+    plt.show()
+
+    print("Frecuencia relativa del número elegido:", np.mean(frecuencias_relativas))
+    print("Valor promedio total:", np.mean(valores_promedio))
+    print("Desvío:", np.mean(desvios))
+    print("Varianza:", np.mean(varianzas))
 
 
-fig, axs = plt.subplots(4, 1, figsize=(10, 20))
-
-axs[0].plot(range(37), frecuencia_relativa, color='blue')
-axs[0].set_title('Frecuencia Relativa')
-axs[0].set_xlabel('Valor')
-axs[0].set_ylabel('Frecuencia Relativa')
-
-axs[1].axhline(y=valor_promedio, color='green', linestyle='--')
-axs[1].set_title('Valor Promedio')
-axs[1].set_xlabel('Valor')
-axs[1].set_ylabel('Valor Promedio')
-
-axs[2].axhline(y=desvio_estandar, color='orange', linestyle='--')
-axs[2].axhline(y=-desvio_estandar, color='orange', linestyle='--')
-axs[2].set_title('Desvío Estándar')
-axs[2].set_xlabel('Valor')
-axs[2].set_ylabel('Desvío Estándar')
-
-axs[3].axhline(y=varianza, color='purple', linestyle='--')
-axs[3].set_title('Varianza')
-axs[3].set_xlabel('Valor')
-axs[3].set_ylabel('Varianza')
+if __name__ == "__main__":
+    main()
 
 
-plt.tight_layout()
-# plt.savefig('Gráficas-Ruleta.png')
-plt.show()
+
+
+
+
+
