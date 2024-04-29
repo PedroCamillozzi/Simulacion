@@ -27,49 +27,30 @@ def main():
     corridas = int(input("Ingrese la cantidad de corridas: "))
     numero_elegido = int(input("Ingrese el número elegido (0-36): "))
 
+    resultados = []
     probabilidades = []
     frecuencias_relativas = []
     valores_promedio = []
     desvios = []
     varianzas = []
     for _ in range(corridas):
-        resultados, probabilidad, frecuencia_relativa, valor_promedio, desvio, varianza = simulacion(tiradas,
-                                                                                                     numero_elegido)
+        resultado, probabilidad, frecuencia_relativa, valor_promedio, desvio, varianza = simulacion(tiradas,
+
+                                                                                                    numero_elegido)
         probabilidades.append(probabilidad)
         frecuencias_relativas.append(frecuencia_relativa)
         valores_promedio.append(valor_promedio)
         desvios.append(desvio)
         varianzas.append(varianza)
-    plt.figure(figsize=(10, 6))
+        resultados.extend(resultado)
 
-    plt.subplot(2, 2, 1)
-    plt.hist(frecuencias_relativas, bins=10, color='blue', edgecolor='black', alpha=0.7)
-    plt.title('Frecuencia Relativa')
-    plt.xlabel('Valor')
-    plt.ylabel('Frecuencia')
+    tiradas_y_corridas = list(range(corridas*tiradas))
 
-    plt.subplot(2, 2, 2)
-    plt.hist(valores_promedio, bins=10, color='green', edgecolor='black', alpha=0.7)
-    plt.title('Valor Promedio')
-    plt.xlabel('Valor')
-    plt.ylabel('Frecuencia')
-
-    plt.subplot(2, 2, 3)
-    plt.hist(desvios, bins=10, color='red', edgecolor='black', alpha=0.7)
-    plt.title('Desvío')
-    plt.xlabel('Valor')
-    plt.ylabel('Frecuencia')
-
-    plt.subplot(2, 2, 4)
-    plt.hist(varianzas, bins=10, color='orange', edgecolor='black', alpha=0.7)
-    plt.title('Varianza')
-    plt.xlabel('Valor')
-    plt.ylabel('Frecuencia')
-
-    plt.tight_layout()
-    # plt.savefig('Gráficas-Ruleta-2.png')
+    fig, ax = plt.subplots(figsize=(20, 8))
+    ax.scatter(tiradas_y_corridas, resultados)
+    ax.legend()
     plt.show()
-
+    
     print("Frecuencia relativa del número elegido:", np.mean(frecuencias_relativas))
     print("Valor promedio total:", np.mean(valores_promedio))
     print("Desvío:", np.mean(desvios))
@@ -78,10 +59,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
