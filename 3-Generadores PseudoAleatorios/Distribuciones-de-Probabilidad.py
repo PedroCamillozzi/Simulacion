@@ -182,8 +182,8 @@ def main():
                 print("")
         elif op == 7:
             N = 100  # Tamaño de la población
-            K = 20  # Número de elementos en la población con la característica de interés
-            n = 10  # Tamaño de la muestra
+            K = 20  # Número de elementos aen la población con la característica de interés
+            n = 10  # Tamaño de la muestr
             listaux = [generatorglc.random() for _ in range(N)]  # Genera una lista de números aleatorios uniformemente distribuidos
             try:
                 hypergeometric_result = hypergeometric_transform(listaux, N, K, n)
